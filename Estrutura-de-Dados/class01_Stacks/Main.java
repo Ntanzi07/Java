@@ -1,4 +1,4 @@
-package Pilhas;
+package Stacks;
 
 public class Main {
     
