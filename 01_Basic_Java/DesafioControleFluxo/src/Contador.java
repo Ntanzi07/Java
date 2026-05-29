@@ -11,7 +11,6 @@ public class Contador {
 
         try{
             contar(parametroUm, parametroDois);
-
         }catch(ParametrosInvalidosException e){
             System.out.println("O segundo parametro deve ser maior que o primeiro!");
         }
