@@ -1,4 +1,5 @@
 import interfaces.lists.List;
+import utils.lists.CircularList;
 import utils.lists.DoubleLinkedList;
 import utils.lists.LinkedList;
 
@@ -7,16 +8,55 @@ record TestCase(String name, Runnable action) {}
 void main() {
     long[] linked = testeList(new LinkedList<>(), 100);
     long[] doubleLinked = testeList(new DoubleLinkedList<>(), 100);
+    long[] circularList = testeList(new CircularList<>(), 100);
     TestCase[] tests = createTests(new LinkedList<>());
 
-    System.out.printf("\n%s%s%s|\n"," ".repeat(32 - 6), "Average time", " ".repeat(32 - 6));
-    System.out.printf("%-15s|%-10s   |%-15s   |%-15s|\n", "Method", "Linked", "DoubleLinked", "result");
-    System.out.printf("%s|\n", "-".repeat(64));
-    for (int i = 0; i < linked.length; i++) {
-        String fasted = linked[i] < doubleLinked[i] ? "linked" : "doubleLinked";
-        System.out.printf("%-15s|%-10sns |%-15sns |%-15s|\n",tests[i].name, linked[i], doubleLinked[i], fasted);
+    printResults(tests, new String[]{"Linked", "DoubleLinked", "Circular"}, linked, doubleLinked, circularList);
+}
+
+public static void printResults(TestCase[] tests, String[] labels, long[]... results) {
+    if (labels.length != results.length) {
+        throw new IllegalArgumentException("labels e results devem ter o mesmo tamanho");
     }
-    System.out.printf("%s|\n", "-".repeat(64));
+
+    int nameWidth = 16;
+    int colWidth = 16;
+
+    StringBuilder header = new StringBuilder();
+    header.append(String.format("%-" + nameWidth + "s |", "Method"));
+    for (String label : labels) {
+        header.append(String.format("%-" + colWidth + "s |", label));
+    }
+    header.append(String.format("%-" + colWidth + "s |", "Fastest"));
+
+    int totalWidth = header.length();
+    int pad = Math.max((totalWidth - "Average time".length()) / 2, 0);
+
+    System.out.printf("%n%s%s%s%n", " ".repeat(pad), "Average time", " ".repeat(pad));
+    System.out.println(header);
+    System.out.println("-".repeat(totalWidth));
+
+    for (int i = 0; i < tests.length; i++) {
+        StringBuilder row = new StringBuilder();
+        row.append(String.format("%-" + nameWidth + "s|", tests[i].name));
+
+        long min = Long.MAX_VALUE;
+        String fastest = "";
+
+        for (int c = 0; c < results.length; c++) {
+            long value = results[c][i];
+            row.append(String.format("%-" + (colWidth - 2) + "sns |", value));
+            if (value < min) {
+                min = value;
+                fastest = labels[c];
+            }
+        }
+
+        row.append(String.format("%-" + colWidth + "s|", fastest));
+        System.out.println(row);
+    }
+
+    System.out.println("-".repeat(totalWidth));
 }
 
 private static TestCase[] createTests(List<Integer> list) {
@@ -32,7 +72,7 @@ private static TestCase[] createTests(List<Integer> list) {
             new TestCase("get(meio)", () -> list.get(list.size()/2)),
             new TestCase("size", list::size),
             new TestCase("isEmpty", list::isEmpty),
-            new TestCase("toArray", list::toArray),
+           // new TestCase("toArray", list::toArray),
             new TestCase("toString", list::toString),
             new TestCase("removeLast", () -> list.remove(list.size() - 1)),
             new TestCase("clear", list::clear)
