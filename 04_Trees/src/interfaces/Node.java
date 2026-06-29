@@ -7,4 +7,6 @@ public interface Node<T extends Comparable<T>>{
     void setLeft(Node<T> left);
     Node<T> right();
     void setRight(Node<T> right);
+    int height();
+    void setHeight(int height);
 }

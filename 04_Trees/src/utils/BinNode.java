@@ -6,6 +6,7 @@ public class BinNode<T extends Comparable<T>> implements Node<T> {
     T value;
     Node<T> left;
     Node<T> right;
+    int height;
 
     public BinNode(T value) {
         this.value = value;
@@ -44,5 +45,15 @@ public class BinNode<T extends Comparable<T>> implements Node<T> {
     @Override
     public void setRight(Node<T> right) {
         this.right = right;
+    }
+
+    @Override
+    public int height() {
+        return height;
+    }
+
+    @Override
+    public void setHeight(int height) {
+        this.height = height;
     }
 }
