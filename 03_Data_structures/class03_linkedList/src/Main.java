@@ -23,11 +23,11 @@ public static void printResults(TestCase[] tests, String[] labels, long[]... res
     int colWidth = 16;
 
     StringBuilder header = new StringBuilder();
-    header.append(String.format("%-" + nameWidth + "s |", "Method"));
+    header.append(String.format("%-" + nameWidth + "s|", "Method"));
     for (String label : labels) {
         header.append(String.format("%-" + colWidth + "s |", label));
     }
-    header.append(String.format("%-" + colWidth + "s |", "Fastest"));
+    header.append(String.format("%-" + colWidth + "s|", "Fastest"));
 
     int totalWidth = header.length();
     int pad = Math.max((totalWidth - "Average time".length()) / 2, 0);
@@ -81,7 +81,6 @@ private static TestCase[] createTests(List<Integer> list) {
 
 
 long[] testeList(List<Integer> listType, int amount) {
-    List<Integer> list = listType;
     TestCase[] tests = createTests(listType);
 
     long[] medians = new long[tests.length];

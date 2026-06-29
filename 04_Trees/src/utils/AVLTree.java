@@ -35,7 +35,7 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
     private Node<T> rotateLeft(Node<T> x) {
         Node<T> y = x.right();
         x.setRight(y.left());
-        y.setRight(x);
+        y.setLeft(x);
         updateHeight(x);
         updateHeight(y);
         return y;
